@@ -1,24 +1,23 @@
-import express from 'express'
-import cors from 'cors'
-import { PrismaClient } from './generated/prisma/index.js'
-import 'dotenv/config'
+import dotenv from "dotenv";
+dotenv.config();
+import app from "./src/app.js";
+import prisma from "./src/config/prisma.js";
+import logger from "./src/utils/logger.js";
 
-const app = express()
-const PORT = process.env.PORT || 5000
-const prisma = new PrismaClient()
+const PORT = process.env.PORT || 5000;
 
-app.use(cors())
-app.use(express.json())
-
-app.get('/api/health', async (_req, res) => {
+async function start() {
   try {
-    await prisma.$connect()
-    res.json({ status: 'ok' })
-  } catch {
-    res.status(503).json({ status: 'error', message: 'Database unavailable' })
-  }
-})
+    await prisma.$connect();
+    logger.info("✅ Database connected");
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
-})
+    app.listen(PORT, () => {
+      logger.info(`🚀 Server running on port ${PORT}`);
+    });
+  } catch (err) {
+   logger.error("❌ Failed to start server", err);
+    process.exit(1);
+  }
+}
+
+start();
