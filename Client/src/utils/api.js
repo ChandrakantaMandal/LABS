@@ -21,13 +21,16 @@ api.interceptors.response.use(
   (res) => res,
   async (error) => {
     const originalRequest = error.config
-    if (error.response?.status === 401 && !originalRequest._retry) {
+
+    // Skip refresh for auth endpoints to prevent loops
+    const isAuthRequest = originalRequest.url?.includes('/auth/')
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
       originalRequest._retry = true
 
       try {
         const res = await axios.get(`${BASE_URL}/auth/refresh`, { withCredentials: true })
 
-        const newToken = res.data.token
+        const newToken = res.data.accessToken
         useAuthStore.getState().setToken(newToken)
         originalRequest.headers.Authorization = `Bearer ${newToken}`
         return api(originalRequest)

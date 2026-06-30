@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 export default function Verify() {
   const { verifyOtp, resendOtp, loading } = useAuthStore()
-  const [email] = useState(() => localStorage.getItem('pendingEmail') || '')
+  const [email] = useState(() => sessionStorage.getItem('pendingEmail') || '')
   const [otp, setOtp] = useState(new Array(6).fill(''))
   const [timeLeft, setTimeLeft] = useState(300)
   const inputRefs = useRef([])
@@ -53,7 +53,7 @@ export default function Verify() {
     try {
       await verifyOtp({ email, otp: verificationCode })
       alert('OTP Verified ✅')
-      navigate('/dashboard')
+      navigate('/login')
     } catch (err) {
       const msg = err.response?.data?.message || err.message || 'Invalid OTP'
       alert(`❌ ${msg}`)

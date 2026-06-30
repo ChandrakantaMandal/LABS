@@ -47,7 +47,7 @@ export const useAuthStore = create(
         set({ loading: true, error: null })
         try {
           await registerAPI(data)
-          localStorage.setItem('pendingEmail', data.email)
+          sessionStorage.setItem('pendingEmail', data.email)
           set({ loading: false })
           return true
         } catch (err) {
@@ -67,11 +67,9 @@ export const useAuthStore = create(
 
           set({
             otpVerified: true,
-            user: res.user,
-            token: res.token,
             loading: false,
           })
-          localStorage.removeItem('pendingEmail')
+          sessionStorage.removeItem('pendingEmail')
 
           return res
         } catch (err) {
@@ -103,8 +101,12 @@ export const useAuthStore = create(
       // LOGOUT
       logout: async () => {
         const { refreshToken } = useAuthStore.getState()
-        await logoutAPI({ refreshToken })
-        localStorage.removeItem('pendingEmail')
+        try {
+          await logoutAPI({ refreshToken })
+        } catch (err) {
+          // continue cleanup even if API fails
+        }
+        sessionStorage.removeItem('pendingEmail')
         localStorage.removeItem('access-token')
         set({ user: null, token: null, refreshToken: null })
       },
