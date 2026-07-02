@@ -169,9 +169,11 @@ export default function Landing() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button className="bg-[#4f46e5] text-white px-10 py-4 rounded-lg text-2xl font-semibold hover:scale-[0.98] transition-transform shadow-xl shadow-indigo-600/20 active:scale-95">
-                Start Learning for Free
-              </button>
+              <Link to="/docs">
+                <button className="bg-[#4f46e5] text-white px-10 py-4 rounded-lg text-2xl font-semibold hover:scale-[0.98] transition-transform shadow-xl shadow-indigo-600/20 active:scale-95">
+                  Start Learning for Free
+                </button>
+              </Link>
               <button
                 className={`flex items-center gap-2 px-10 py-4 rounded-lg border ${theme.border} text-2xl font-semibold hover:bg-slate-500/10 transition-colors active:scale-95`}
               >
@@ -315,7 +317,6 @@ export default function Landing() {
                   <p className={`text-sm ${theme.textMuted}`}>{item.desc}</p>
                 </div>
               ))}
-              </div>
             </div>
           </div>
         </section>
