@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Mail, Lock, ArrowRight, User } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
-import Loader from '../../components/common/Loader'
+import Loader from '../../components/common/Loader.jsx'
 import { useAuthStore } from '../../store/authStore'
 
 function Register() {
