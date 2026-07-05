@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Mail, Lock, ArrowRight, User } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
+import Loader from '../../components/common/Loader'
 import { useAuthStore } from '../../store/authStore'
 
 function Register() {
@@ -22,8 +23,15 @@ function Register() {
   }
 
   return (
-    // Global Screen Wrapper (Dark background, Centered layout)
-    <div className="bg-[#060913] min-h-screen w-screen flex items-center justify-center relative overflow-y-auto px-4 py-6 antialiased select-none font-sans">
+    <>
+      {loading && (
+        <div className="fixed inset-0 z-50">
+          <Loader />
+        </div>
+      )}
+
+      {/* Global Screen Wrapper (Dark background, Centered layout) */}
+      <div className="bg-[#060913] min-h-screen w-screen flex items-center justify-center relative overflow-y-auto px-4 py-6 antialiased select-none font-sans">
       {/* Decorative Background Neon Ambient Orbs */}
       <div className="absolute w-[350px] height-[350px] rounded-full blur-[100px] opacity-15 pointer-events-none z-1 top-[-50px] left-[-50px] bg-[#6366f1]"></div>
       <div className="absolute w-[350px] height-[350px] rounded-full blur-[100px] opacity-15 pointer-events-none z-1 bottom-[-50px] right-[-50px] bg-[#a855f7]"></div>
@@ -104,16 +112,30 @@ function Register() {
               />
             </div>
           </div>
+          {error && (
+            <p className="text-sm text-red-400 text-center font-medium">{error}</p>
+          )}
+
           {/* Premium Glowing Login Trigger */}
           <button
             type="submit"
-            className="group/btn bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white border-none py-3 px-4 rounded-xl text-[14.5px] font-bold cursor-pointer flex items-center justify-center gap-2 shadow-[0_8px_24px_rgba(99,102,241,0.4)] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_12px_28px_rgba(99,102,241,0.55)]"
+            disabled={loading}
+            className="group/btn bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white border-none py-3 px-4 rounded-xl text-[14.5px] font-bold cursor-pointer flex items-center justify-center gap-2 shadow-[0_8px_24px_rgba(99,102,241,0.4)] transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_12px_28px_rgba(99,102,241,0.55)] disabled:cursor-not-allowed disabled:opacity-80"
           >
-            <span>Register</span>
-            <ArrowRight
-              size={16}
-              className="transition-transform duration-300 group-hover/btn:translate-x-[3px]"
-            />
+            {loading ? (
+              <>
+                <div className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                <span>Creating Account...</span>
+              </>
+            ) : (
+              <>
+                <span>Register</span>
+                <ArrowRight
+                  size={16}
+                  className="transition-transform duration-300 group-hover/btn:translate-x-[3px]"
+                />
+              </>
+            )}
           </button>
         </form>
 
@@ -130,7 +152,8 @@ function Register() {
           </p>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   )
 }
 
