@@ -220,8 +220,7 @@ function Register() {
           </p>
         </div>
       </div>
-      </div>
-    </>
+    </div>
   )
 }
 
