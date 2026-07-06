@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import DocsLayout, { DocPage } from '../../docs/DocsLayout.jsx'
+import DocsLayout from '../../docs/DocsLayout.jsx'
 import { lazy, Suspense } from 'react'
 import ProtectedRoute from './ProtectedRoute.jsx'
 import Loader from '../components/common/Loader.jsx'
@@ -26,14 +26,7 @@ export default function AppRoutes() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/docs/*"
-          element={
-            <DocsLayout>
-              <DocPage />
-            </DocsLayout>
-          }
-        />
+        <Route path="/docs/*" element={<DocsLayout />} />
       </Routes>
     </Suspense>
   )
