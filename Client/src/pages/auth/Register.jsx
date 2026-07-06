@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Mail, Lock, ArrowRight, User, Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
-import Loader from '../../components/common/Loader.jsx'
+import RegLoader from '../../components/common/regloader.jsx'
+import PasswordStrengthMeter from '../../components/auth/PasswordStrengthMeter.jsx'
 import { useAuthStore } from '../../store/authStore'
 
 function Register() {
@@ -81,9 +82,11 @@ function Register() {
   const currentTheme = isDarkMode ? themes.dark : themes.light
 
   return (
-    <div
-      className={`min-h-screen w-screen flex items-center justify-center relative overflow-y-auto px-4 py-6 antialiased select-none font-sans transition-colors duration-300 ${currentTheme.bgMain}`}
-    >
+    <>
+      {loading && <RegLoader />}
+      <div
+        className={`min-h-screen w-screen flex items-center justify-center relative overflow-y-auto px-4 py-6 antialiased select-none font-sans transition-colors duration-300 ${currentTheme.bgMain}`}
+      >
       <div
         className={`absolute w-[350px] h-[350px] rounded-full blur-[100px] opacity-15 pointer-events-none z-1 top-[-50px] left-[-50px] transition-all duration-700 ${currentTheme.orbLeft}`}
       ></div>
@@ -191,6 +194,7 @@ function Register() {
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
+            <PasswordStrengthMeter password={password} isDarkMode={isDarkMode} />
           </div>
 
           <button
