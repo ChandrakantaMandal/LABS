@@ -46,6 +46,26 @@ export default function Verify() {
     }
   }
 
+  const handlePaste = (e) => {
+    const pastedValue = e.clipboardData.getData('text').replace(/\D/g, '')
+
+    if (!pastedValue) return
+
+    e.preventDefault()
+
+    const digits = pastedValue.slice(0, 6).split('')
+    const newOtp = Array(6).fill('')
+
+    digits.forEach((digit, index) => {
+      newOtp[index] = digit
+    })
+
+    setOtp(newOtp)
+
+    const nextIndex = Math.min(digits.length, 5)
+    inputRefs.current[nextIndex]?.focus()
+  }
+
   const handleVerify = async (e) => {
     e.preventDefault()
     const verificationCode = otp.join('')
@@ -106,6 +126,9 @@ export default function Verify() {
                 ref={(el) => (inputRefs.current[index] = el)}
                 onChange={(e) => handleChange(e.target, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
+                onPaste={handlePaste}
+                inputMode="numeric"
+                autoComplete="one-time-code"
                 required
                 className="w-full h-13 bg-[#060913] border border-[#1e293b] rounded-xl text-xl font-bold text-white text-center outline-none box-border transition-all duration-200 ease-in-out hover:border-white/40 focus:border-white focus:bg-[#090e1e] focus:shadow-[0_0_15px_rgba(255,255,255,0.15)] focus:scale-[1.04]"
               />

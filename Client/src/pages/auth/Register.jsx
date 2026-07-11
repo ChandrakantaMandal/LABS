@@ -28,9 +28,19 @@ function Register() {
 
   const navigate = useNavigate()
   const { register, loading, error } = useAuthStore()
+  const passwordRules = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/
+  const isPasswordValid = password.length > 0 && passwordRules.test(password)
+  const [passwordError, setPasswordError] = useState('')
 
   const handleRegister = async (e) => {
     e.preventDefault()
+
+    if (!isPasswordValid) {
+      setPasswordError('Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character.')
+      return
+    }
+
+    setPasswordError('')
     const res = await register({ name, email, password })
     if (res) {
       navigate('/verify')
@@ -183,7 +193,7 @@ function Register() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className={`w-full pl-[42px] pr-[44px] py-3 text-sm outline-none box-border transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-xl ${currentTheme.inputBg} ${currentTheme.inputFocus}`}
+                className={`w-full pl-[42px] pr-[44px] py-3 text-sm outline-none box-border transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-xl ${currentTheme.inputBg} ${currentTheme.inputFocus} ${password && !isPasswordValid ? 'border-red-500' : ''}`}
               />
               {/* Show/Hide Password Eye Button */}
               <button
@@ -194,12 +204,15 @@ function Register() {
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
-            <PasswordStrengthMeter password={password} isDarkMode={isDarkMode} />
+            {passwordError && (
+              <p className="text-[11px] font-medium text-red-400">{passwordError}</p>
+            )}
+            <PasswordStrengthMeter password={password} isDarkMode={isDarkMode} isValidPassword={isPasswordValid} />
           </div>
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !name || !email || !password || !isPasswordValid}
             className={`group/btn bg-gradient-to-r text-white border-none py-3 px-4 rounded-xl text-[14.5px] font-bold cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-[2px] disabled:opacity-50 ${currentTheme.btnGradient} ${currentTheme.btnShadow}`}
           >
             <span>{loading ? 'Registering...' : 'Register'}</span>
@@ -225,6 +238,7 @@ function Register() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 
