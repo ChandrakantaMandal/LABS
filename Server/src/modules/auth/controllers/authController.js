@@ -82,8 +82,6 @@ export const verifyEmailOTP = async (req, res) => {
 
     await deleteOTP(email)
 
-    logger.info(`User verified: ${email}`)
-
     return res.json({ message: 'Email verified successfully' })
   } catch (err) {
     logger.error('VERIFY OTP ERROR:', err)
