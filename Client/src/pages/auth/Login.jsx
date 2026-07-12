@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
+import LoginLoader from '../../components/common/loginloader'
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -82,6 +83,7 @@ function Login() {
     <div
       className={`min-h-screen w-screen flex items-center justify-center relative overflow-y-auto px-4 py-6 antialiased select-none font-sans transition-colors duration-300 ${currentTheme.bgMain}`}
     >
+      {loading && <LoginLoader />}
       <div
         className={`absolute w-[350px] h-[350px] rounded-full blur-[100px] opacity-15 pointer-events-none z-1 top-[-50px] left-[-50px] transition-all duration-700 ${currentTheme.orbLeft}`}
       ></div>
@@ -183,13 +185,15 @@ function Login() {
           <button
             type="submit"
             disabled={loading}
-            className={`group/btn bg-gradient-to-r text-white border-none py-3 px-4 rounded-xl text-[14.5px] font-bold cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-[2px] disabled:opacity-50 ${currentTheme.btnGradient} ${currentTheme.btnShadow}`}
+            className={`group/btn bg-gradient-to-r text-white border-none py-3 px-4 rounded-xl text-[14.5px] font-bold cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-[2px] disabled:opacity-60 ${currentTheme.btnGradient} ${currentTheme.btnShadow}`}
           >
             <span>{loading ? 'Logging in...' : 'Login'}</span>
-            <ArrowRight
-              size={16}
-              className="transition-transform duration-300 group-hover/btn:translate-x-[3px]"
-            />
+            {!loading && (
+              <ArrowRight
+                size={16}
+                className="transition-transform duration-300 group-hover/btn:translate-x-[3px]"
+              />
+            )}
           </button>
         </form>
 
