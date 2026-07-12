@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { ArrowRight, ShieldCheck, RotateCcw } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export default function Verify() {
   const { verifyOtp, resendOtp, loading } = useAuthStore()
@@ -52,11 +53,11 @@ export default function Verify() {
 
     try {
       await verifyOtp({ email, otp: verificationCode })
-      alert('OTP Verified ✅')
+      toast.success('OTP Verified')
       navigate('/login')
     } catch (err) {
       const msg = err.response?.data?.message || err.message || 'Invalid OTP'
-      alert(`❌ ${msg}`)
+      toast.error(msg)
     }
   }
 
@@ -66,10 +67,10 @@ export default function Verify() {
       setTimeLeft(300)
       setOtp(new Array(6).fill(''))
       inputRefs.current[0].focus()
-      alert('OTP Resent 📩')
+      toast.success('OTP Resent')
     } catch (err) {
       const msg = err.response?.data?.message || err.message || 'Failed to resend OTP'
-      alert(`❌ ${msg}`)
+      toast.error(msg)
     }
   }
 
