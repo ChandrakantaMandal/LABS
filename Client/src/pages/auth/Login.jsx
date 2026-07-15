@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
+import LoginLoader from '../../components/common/loginloader'
 import { themes } from '../../lib/themes.js'
 import { toast } from 'react-toastify'
 
@@ -44,6 +45,7 @@ function Login() {
     <div
       className={`min-h-screen w-screen flex items-center justify-center relative overflow-y-auto antialiased select-none font-sans transition-colors duration-300 ${currentTheme.bgMain}`}
     >
+      {loading && <LoginLoader />}
       {/* Mobile-only orbs */}
       <div
         className={`md:hidden absolute w-[350px] h-[350px] rounded-full blur-[100px] opacity-15 pointer-events-none z-1 top-[-50px] left-[-50px] transition-all duration-700 ${currentTheme.orbLeft}`}
@@ -231,6 +233,34 @@ function Login() {
               </p>
             </div>
           </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className={`group/btn bg-gradient-to-r text-white border-none py-3 px-4 rounded-xl text-[14.5px] font-bold cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-[2px] disabled:opacity-60 ${currentTheme.btnGradient} ${currentTheme.btnShadow}`}
+          >
+            <span>{loading ? 'Logging in...' : 'Login'}</span>
+            {!loading && (
+              <ArrowRight
+                size={16}
+                className="transition-transform duration-300 group-hover/btn:translate-x-[3px]"
+              />
+            )}
+          </button>
+        </form>
+
+        <div
+          className={`mt-6 pt-5 border-t text-center ${isDarkMode ? 'border-[#1e293b]' : 'border-slate-100'}`}
+        >
+          <p className={`text-sm m-0 ${currentTheme.descText}`}>
+            Don't have an account?{' '}
+            <Link
+              to="/register"
+              className={`inline-flex items-center font-semibold transition-all duration-300 hover:underline ${currentTheme.linkText}`}
+            >
+              Register
+            </Link>
+          </p>
         </div>
       </div>
     </div>
