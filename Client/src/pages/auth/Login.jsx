@@ -233,34 +233,6 @@ function Login() {
               </p>
             </div>
           </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className={`group/btn bg-gradient-to-r text-white border-none py-3 px-4 rounded-xl text-[14.5px] font-bold cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-[2px] disabled:opacity-60 ${currentTheme.btnGradient} ${currentTheme.btnShadow}`}
-          >
-            <span>{loading ? 'Logging in...' : 'Login'}</span>
-            {!loading && (
-              <ArrowRight
-                size={16}
-                className="transition-transform duration-300 group-hover/btn:translate-x-[3px]"
-              />
-            )}
-          </button>
-        </form>
-
-        <div
-          className={`mt-6 pt-5 border-t text-center ${isDarkMode ? 'border-[#1e293b]' : 'border-slate-100'}`}
-        >
-          <p className={`text-sm m-0 ${currentTheme.descText}`}>
-            Don't have an account?{' '}
-            <Link
-              to="/register"
-              className={`inline-flex items-center font-semibold transition-all duration-300 hover:underline ${currentTheme.linkText}`}
-            >
-              Register
-            </Link>
-          </p>
         </div>
       </div>
     </div>
