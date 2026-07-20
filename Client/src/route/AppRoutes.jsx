@@ -8,6 +8,7 @@ const Landing = lazy(() => import('../pages/Landing.jsx'))
 const Login = lazy(() => import('../pages/auth/Login.jsx'))
 const Register = lazy(() => import('../pages/auth/Register.jsx'))
 const Verify = lazy(() => import('../pages/auth/Verify.jsx'))
+const ForgotPassword = lazy(() => import('../pages/auth/ForgotPassword.jsx'))
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard.jsx'))
 
 export default function AppRoutes() {
@@ -18,6 +19,7 @@ export default function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify" element={<Verify />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
           path="/dashboard"
           element={

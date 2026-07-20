@@ -23,3 +23,13 @@ export const resendOtpAPI = async (data) => {
   const res = await api.post('/auth/resend-otp', data)
   return res.data
 }
+
+export const requestPasswordResetAPI = async (data) => {
+  const res = await api.post('/auth/request-password-reset', data)
+  return res.data
+}
+
+export const resetPasswordAPI = async (data) => {
+  const res = await api.post('/auth/reset-password', data)
+  return res.data
+}
