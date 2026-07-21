@@ -48,9 +48,6 @@ function ForgotPassword() {
     } catch (err) {
       const message = err.response?.data?.message || 'Unable to send reset code'
       toast.error(message)
-      if (message === 'User not found') {
-        toast.info('Please use the email address linked to your existing account')
-      }
     } finally {
       setLoading(false)
     }
@@ -246,6 +243,8 @@ function ForgotPassword() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      aria-pressed={showPassword}
                       className="absolute right-[14px] bg-transparent border-none p-0 cursor-pointer text-[#94a3b8] hover:text-slate-400 focus:outline-none flex items-center h-full"
                     >
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}

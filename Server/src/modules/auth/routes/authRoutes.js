@@ -12,7 +12,12 @@ import {
 } from '../controllers/authController.js'
 
 import { validate } from '../../../middleware/validate.js'
-import { registerSchema, loginSchema } from '../../../validators/authValidator.js'
+import {
+  registerSchema,
+  loginSchema,
+  requestPasswordResetSchema,
+  resetPasswordSchema,
+} from '../../../validators/authValidator.js'
 import { verifyOtpSchema, resendOtpSchema } from '../../../validators/otpValidator.js'
 
 import { authLimiter, otpLimiter } from '../../../middleware/rateLimiter.js'
@@ -24,8 +29,8 @@ router.post('/register', authLimiter, validate(registerSchema), register)
 router.post('/verify-otp', otpLimiter, validate(verifyOtpSchema), verifyEmailOTP)
 router.post('/login', authLimiter, validate(loginSchema), login)
 router.post('/resend-otp', otpLimiter, validate(resendOtpSchema), resendOTP)
-router.post('/request-password-reset', otpLimiter, requestPasswordReset)
-router.post('/reset-password', otpLimiter, resetPassword)
+router.post('/request-password-reset', otpLimiter, validate(requestPasswordResetSchema), requestPasswordReset)
+router.post('/reset-password', otpLimiter, validate(resetPasswordSchema), resetPassword)
 
 router.post('/refresh', refreshToken)
 router.post('/logout', logout)

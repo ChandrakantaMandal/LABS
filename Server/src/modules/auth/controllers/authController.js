@@ -189,12 +189,8 @@ export const requestPasswordReset = async (req, res) => {
 
     const user = await prisma.user.findUnique({ where: { email } })
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' })
-    }
-
-    if (!user.isVerified) {
-      return res.status(403).json({ message: 'Please verify your email before resetting the password' })
+    if (!user || !user.isVerified) {
+      return res.json({ message: 'If an account exists and is verified, a reset code will be sent.' })
     }
 
     const otp = generateOTP()
@@ -235,8 +231,7 @@ export const resetPassword = async (req, res) => {
     const isSamePassword = await bcrypt.compare(newPassword, user.password)
 
     if (isSamePassword) {
-      await deleteOTP(email)
-      return res.json({ message: 'Password already in use' })
+      return res.status(400).json({ message: 'Password already in use' })
     }
 
     const hashed = await bcrypt.hash(newPassword, 10)
