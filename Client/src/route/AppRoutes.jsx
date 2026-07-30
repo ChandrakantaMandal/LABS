@@ -11,6 +11,7 @@ const Register = lazy(() => import('../pages/auth/Register.jsx'))
 const Verify = lazy(() => import('../pages/auth/Verify.jsx'))
 
 // Dashboard Section Pages
+const ForgotPassword = lazy(() => import('../pages/auth/ForgotPassword.jsx'))
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard.jsx'))
 const Settings = lazy(() => import('../pages/dashboard/Settings.jsx'))
 const Challenges = lazy(() => import('../pages/dashboard/Challenges.jsx'))
@@ -26,8 +27,7 @@ export default function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify" element={<Verify />} />
-
-        {/* Protected Dashboard Routes */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
           path="/dashboard"
           element={

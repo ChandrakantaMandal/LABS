@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
+import LoginLoader from '../../components/common/loginloader'
 import { themes } from '../../lib/themes.js'
 import { toast } from 'react-toastify'
 
@@ -44,6 +45,7 @@ function Login() {
     <div
       className={`min-h-screen w-screen flex items-center justify-center relative overflow-y-auto antialiased select-none font-sans transition-colors duration-300 ${currentTheme.bgMain}`}
     >
+      {loading && <LoginLoader />}
       {/* Mobile-only orbs */}
       <div
         className={`md:hidden absolute w-[350px] h-[350px] rounded-full blur-[100px] opacity-15 pointer-events-none z-1 top-[-50px] left-[-50px] transition-all duration-700 ${currentTheme.orbLeft}`}

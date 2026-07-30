@@ -11,7 +11,7 @@ import {
 
 import { generateOTP, storeOTP, verifyOTP, deleteOTP } from '../services/otp.js'
 
-import { sendOTPEmail } from '../services/sendEmail.js'
+import { sendOTPEmail, sendResetPasswoprdOTPEmail } from '../services/sendEmail.js'
 
 // ======================= REGISTER =======================
 export const register = async (req, res) => {
@@ -172,6 +172,80 @@ export const resendOTP = async (req, res) => {
     return res.json({ message: 'OTP resent successfully' })
   } catch (err) {
     logger.error('RESEND OTP ERROR:', err)
+    return res.status(500).json({ error: err.message })
+  }
+}
+
+// ======================= REQUEST PASSWORD RESET =======================
+export const requestPasswordReset = async (req, res) => {
+  try {
+    let { email } = req.body
+
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' })
+    }
+
+    email = email.trim().toLowerCase()
+
+    const user = await prisma.user.findUnique({ where: { email } })
+
+    if (!user || !user.isVerified) {
+      return res.json({ message: 'If an account exists and is verified, a reset code will be sent.' })
+    }
+
+    const otp = generateOTP()
+
+    await storeOTP(email, otp)
+    await sendResetPasswoprdOTPEmail(email, otp)
+
+    return res.json({ message: 'Reset code sent successfully' })
+  } catch (err) {
+    logger.error('REQUEST PASSWORD RESET ERROR:', err)
+    return res.status(500).json({ error: err.message })
+  }
+}
+
+// ======================= RESET PASSWORD =======================
+export const resetPassword = async (req, res) => {
+  try {
+    let { email, otp, newPassword } = req.body
+
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ message: 'Missing fields' })
+    }
+
+    email = email.trim().toLowerCase()
+
+    const valid = await verifyOTP(email, otp)
+
+    if (!valid) {
+      return res.status(400).json({ message: 'Invalid or expired reset code' })
+    }
+
+    const user = await prisma.user.findUnique({ where: { email } })
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    const isSamePassword = await bcrypt.compare(newPassword, user.password)
+
+    if (isSamePassword) {
+      return res.status(400).json({ message: 'Password already in use' })
+    }
+
+    const hashed = await bcrypt.hash(newPassword, 10)
+
+    await prisma.user.update({
+      where: { email },
+      data: { password: hashed },
+    })
+
+    await deleteOTP(email)
+
+    return res.json({ message: 'Password reset successfully' })
+  } catch (err) {
+    logger.error('RESET PASSWORD ERROR:', err)
     return res.status(500).json({ error: err.message })
   }
 }
